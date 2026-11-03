@@ -26,6 +26,9 @@ const STORAGE_KEY = "calculatorHistory";
 
 const operators = ["+", "-", "*", "/"];
 
+// Maximum number of characters allowed in an expression
+const MAX_INPUT_LENGTH = 20;
+
 let justCalculated = false;
 
 
@@ -270,6 +273,14 @@ function handleInput(value) {
     // CALCULATE RESULT
     if (value === "=") {
 
+        // Ignore repeated "=" so the same result
+        // is never added to the history twice
+        if (justCalculated) {
+
+            return;
+
+        }
+
         if (
             current.trim() === "" ||
             current === "Error"
@@ -326,8 +337,22 @@ function handleInput(value) {
 
         const lastChar = current.slice(-1);
 
-        // Prevent consecutive operators
+        // Replace a trailing operator instead of stacking
+        // two of them, which would create a malformed expression
         if (operators.includes(lastChar)) {
+
+            if (current.length > 1) {
+
+                display.value = current.slice(0, -1) + value;
+
+            }
+
+            return;
+
+        }
+
+        // Stop the expression from growing without a limit
+        if (current.length >= MAX_INPUT_LENGTH) {
 
             return;
 
@@ -353,6 +378,13 @@ function handleInput(value) {
             current = "";
 
             justCalculated = false;
+
+        }
+
+        // Stop the expression from growing without a limit
+        if (current.length >= MAX_INPUT_LENGTH) {
+
+            return;
 
         }
 
@@ -389,7 +421,30 @@ function handleInput(value) {
 
             display.value = "";
 
+            current = "";
+
             justCalculated = false;
+
+        }
+
+        // Stop the expression from growing without a limit
+        if (current.length >= MAX_INPUT_LENGTH) {
+
+            return;
+
+        }
+
+        const parts = current.split(/[+\-*/]/);
+
+        const lastNumber = parts[parts.length - 1];
+
+        // Replace a leading zero instead of building
+        // invalid looking numbers such as "07"
+        if (lastNumber === "0") {
+
+            display.value = current.slice(0, -1);
+
+            current = display.value;
 
         }
 
