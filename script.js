@@ -159,8 +159,249 @@ function addToHistory(expression, result) {
 
 
 // ==========================================
-// 8. CALCULATE MATHEMATICAL EXPRESSION
+// 8. SAFE ARITHMETIC EXPRESSION EVALUATION
 // ==========================================
+
+// Tokenizer: turns an expression string into a list of tokens
+function tokenize(expression) {
+
+    const tokens = [];
+
+    let index = 0;
+
+    while (index < expression.length) {
+
+        const char = expression[index];
+
+
+        // Ignore whitespace
+        if (/\s/.test(char)) {
+
+            index++;
+
+            continue;
+
+        }
+
+
+        // Numbers (digits with an optional decimal point)
+        if (/[0-9.]/.test(char)) {
+
+            let number = "";
+
+            while (index < expression.length &&
+                /[0-9.]/.test(expression[index])) {
+
+                number += expression[index];
+
+                index++;
+
+            }
+
+
+            // Reject malformed numbers such as "1..2" or "1.2.3"
+            if (!/^\d*\.?\d+$/.test(number) &&
+                !/^\d+\.$/.test(number)) {
+
+                throw new Error("Invalid number");
+
+            }
+
+            tokens.push({ type: "number", value: parseFloat(number) });
+
+            continue;
+
+        }
+
+
+        // Operators and parentheses
+        if ("+-*/()".includes(char)) {
+
+            tokens.push({ type: char });
+
+            index++;
+
+            continue;
+
+        }
+
+        // Any other character makes the expression invalid
+        throw new Error("Invalid character");
+
+    }
+
+    return tokens;
+
+}
+
+
+// Recursive descent parser with full operator precedence
+// Supports: parentheses, unary minus, * and / before + and -
+function evaluate(expression) {
+
+    const tokens = tokenize(expression);
+
+    let position = 0;
+
+
+    function peek() {
+
+        return tokens[position];
+
+    }
+
+
+    function consume(type) {
+
+        const token = tokens[position];
+
+        if (token && token.type === type) {
+
+            position++;
+
+            return token;
+
+        }
+
+        return null;
+
+    }
+
+
+    // primary := number | "(" expression ")"
+    function parsePrimary() {
+
+        const token = peek();
+
+        if (!token) {
+
+            throw new Error("Unexpected end of expression");
+
+        }
+
+        if (token.type === "number") {
+
+            position++;
+
+            return token.value;
+
+        }
+
+        if (consume("(")) {
+
+            const value = parseExpression();
+
+            if (!consume(")")) {
+
+                throw new Error("Missing closing parenthesis");
+
+            }
+
+            return value;
+
+        }
+
+        throw new Error("Unexpected token");
+
+    }
+
+
+    // factor := ("-" | "+") primary
+    function parseFactor() {
+
+        if (consume("-")) {
+
+            return -parseFactor();
+
+        }
+
+        if (consume("+")) {
+
+            return parseFactor();
+
+        }
+
+        return parsePrimary();
+
+    }
+
+
+    // term := factor (("*" | "/") factor)*
+    function parseTerm() {
+
+        let value = parseFactor();
+
+        while (peek() &&
+            (peek().type === "*" || peek().type === "/")) {
+
+            const operator = tokens[position].type;
+
+            position++;
+
+            const right = parseFactor();
+
+            if (operator === "*") {
+
+                value = value * right;
+
+            }
+            else {
+
+                // Division by zero is an error, never Infinity
+                if (right === 0) {
+
+                    throw new Error("Division by zero");
+
+                }
+
+                value = value / right;
+
+            }
+
+        }
+
+        return value;
+
+    }
+
+
+    // expression := term (("+" | "-") term)*
+    function parseExpression() {
+
+        let value = parseTerm();
+
+        while (peek() &&
+            (peek().type === "+" || peek().type === "-")) {
+
+            const operator = tokens[position].type;
+
+            position++;
+
+            const right = parseTerm();
+
+            value = operator === "+" ? value + right : value - right;
+
+        }
+
+        return value;
+
+    }
+
+
+    const result = parseExpression();
+
+
+    // The whole expression must be consumed
+    if (position !== tokens.length) {
+
+        throw new Error("Trailing characters");
+
+    }
+
+    return result;
+
+}
+
 
 function calculate(expression) {
 
@@ -170,9 +411,7 @@ function calculate(expression) {
             return "Error";
         }
 
-        const result = Function(
-            '"use strict"; return (' + expression + ')'
-        )();
+        const result = evaluate(expression);
 
         if (
             typeof result !== "number" ||
