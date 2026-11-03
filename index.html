@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="calculator">
+
+        <div class="display">
+            <input type="text" id="result" readonly>
+        </div>
+
+        <div class="buttons">
+
+    <button type="button">AC</button>
+    <button type="button">DEL</button>
+    <button type="button">÷</button>
+    <button type="button">×</button>
+
+    <button type="button">7</button>
+    <button type="button">8</button>
+    <button type="button">9</button>
+    <button type="button">-</button>
+
+    <button type="button">4</button>
+    <button type="button">5</button>
+    <button type="button">6</button>
+    <button type="button">+</button>
+
+    <button type="button">1</button>
+    <button type="button">2</button>
+    <button type="button">3</button>
+    <button type="button">=</button>
+
+    <button type="button" class="zero">0</button>
+    <button type="button">.</button>
+
+</div>
+       <button type="button" id="historyToggle">
+    History
+</button>
+
+<div class="history-panel" id="historyPanel" hidden>
+
+    <div class="history-header">
+        <h3>Calculation History</h3>
+        <button type="button" id="closeHistory">X</button>
+        <button type="button" id="clearHistory">Clear</button>
+    </div>
+
+    <ul id="historyList"></ul>
+
+</div>
+</div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

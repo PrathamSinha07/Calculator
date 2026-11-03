@@ -1,0 +1,312 @@
+
+/* =================================
+   GLOBAL RESET
+================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =================================
+   PAGE
+================================= */
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #171717;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 20px;
+}
+
+
+/* =================================
+   CALCULATOR CONTAINER
+================================= */
+
+.calculator {
+    width: 100%;
+    max-width: 360px;
+
+    padding: 24px;
+
+    background: #292929;
+
+    border-radius: 24px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+}
+
+
+/* =================================
+   DISPLAY
+================================= */
+
+.display {
+    margin-bottom: 22px;
+}
+
+.display input {
+    width: 100%;
+    height: 85px;
+
+    padding: 15px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 12px;
+
+    background: #3b3b3b;
+
+    color: #ffffff;
+
+    font-size: 36px;
+    font-weight: 500;
+
+    text-align: right;
+}
+
+
+/* =================================
+   BUTTON GRID
+================================= */
+
+.buttons {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 12px;
+}
+
+
+/* =================================
+   ALL BUTTONS
+================================= */
+
+.buttons button {
+    width: 100%;
+    height: 65px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: #414141;
+
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease,
+                transform 0.15s ease;
+}
+
+
+/* Hover effect */
+
+.buttons button:hover {
+    background: #555555;
+}
+
+
+/* Click effect */
+
+.buttons button:active {
+    transform: scale(0.94);
+}
+
+
+/* =================================
+   OPERATORS
+================================= */
+
+.buttons button:nth-child(3),
+.buttons button:nth-child(4),
+.buttons button:nth-child(8),
+.buttons button:nth-child(12),
+.buttons button:nth-child(16) {
+
+    background: #ff9500;
+
+    color: white;
+}
+
+.buttons button:nth-child(3):hover,
+.buttons button:nth-child(4):hover,
+.buttons button:nth-child(8):hover,
+.buttons button:nth-child(12):hover,
+.buttons button:nth-child(16):hover {
+
+    background: #e68700;
+}
+
+
+/* =================================
+   CLEAR AND DELETE
+================================= */
+
+.buttons button:nth-child(1),
+.buttons button:nth-child(2) {
+
+    background: #555555;
+
+    color: #ffb74d;
+}
+
+
+/* =================================
+   EQUALS BUTTON
+================================= */
+
+.buttons button:nth-child(16) {
+
+    background: #ff9500;
+
+    color: white;
+}
+
+
+/* =================================
+   ZERO BUTTON
+================================= */
+
+.buttons .zero {
+    grid-column: span 2;
+}
+
+
+/* =================================
+   HISTORY BUTTON
+================================= */
+
+#historyToggle {
+    width: 100%;
+    height: 45px;
+
+    margin-top: 20px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #383838;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+#historyToggle:hover {
+    background: #505050;
+}
+
+
+/* =================================
+   HISTORY PANEL
+================================= */
+
+.history-panel[hidden] {
+    display: none;
+}
+
+.history-panel {
+    margin-top: 18px;
+    padding: 16px;
+
+    background: #353535;
+
+    border-radius: 12px;
+
+    color: white;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+}
+
+.history-header h3 {
+    font-size: 17px;
+}
+
+.history-header button {
+    padding: 7px 12px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #555555;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+#historyList {
+    max-height: 180px;
+
+    overflow-y: auto;
+}
+
+#historyList li {
+    list-style: none;
+
+    padding: 11px 4px;
+
+    border-bottom: 1px solid #555555;
+
+    font-size: 14px;
+
+    color: #eeeeee;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =================================
+   MOBILE RESPONSIVENESS
+================================= */
+
+@media (max-width: 400px) {
+
+    .calculator {
+        padding: 18px;
+    }
+
+    .buttons {
+        gap: 9px;
+    }
+
+    .buttons button {
+        height: 58px;
+        font-size: 19px;
+    }
+
+    .display input {
+        height: 75px;
+        font-size: 30px;
+    }
+
+}
