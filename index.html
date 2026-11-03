@@ -13,48 +13,48 @@
     <div class="calculator">
 
         <div class="display">
-            <input type="text" id="result" readonly>
+            <input type="text" id="result" readonly aria-label="Calculator display" aria-live="polite">
         </div>
 
-        <div class="buttons">
+        <div class="buttons" role="group" aria-label="Calculator buttons">
 
-    <button type="button">AC</button>
-    <button type="button">DEL</button>
-    <button type="button">÷</button>
-    <button type="button">×</button>
+    <button type="button" data-key="AC" aria-label="Clear all">AC</button>
+    <button type="button" data-key="DEL" aria-label="Delete last character">DEL</button>
+    <button type="button" data-key="/" aria-label="Divide">÷</button>
+    <button type="button" data-key="*" aria-label="Multiply">×</button>
 
-    <button type="button">7</button>
-    <button type="button">8</button>
-    <button type="button">9</button>
-    <button type="button">-</button>
+    <button type="button" data-key="7">7</button>
+    <button type="button" data-key="8">8</button>
+    <button type="button" data-key="9">9</button>
+    <button type="button" data-key="-" aria-label="Subtract">-</button>
 
-    <button type="button">4</button>
-    <button type="button">5</button>
-    <button type="button">6</button>
-    <button type="button">+</button>
+    <button type="button" data-key="4">4</button>
+    <button type="button" data-key="5">5</button>
+    <button type="button" data-key="6">6</button>
+    <button type="button" data-key="+" aria-label="Add">+</button>
 
-    <button type="button">1</button>
-    <button type="button">2</button>
-    <button type="button">3</button>
-    <button type="button">=</button>
+    <button type="button" data-key="1">1</button>
+    <button type="button" data-key="2">2</button>
+    <button type="button" data-key="3">3</button>
+    <button type="button" data-key="=" aria-label="Calculate result">=</button>
 
-    <button type="button" class="zero">0</button>
-    <button type="button">.</button>
+    <button type="button" class="zero" data-key="0">0</button>
+    <button type="button" data-key=".">.</button>
 
 </div>
-       <button type="button" id="historyToggle">
+       <button type="button" id="historyToggle" aria-expanded="false" aria-controls="historyPanel">
     History
 </button>
 
-<div class="history-panel" id="historyPanel" hidden>
+<div class="history-panel" id="historyPanel" role="region" aria-label="Calculation history" hidden>
 
     <div class="history-header">
-        <h3>Calculation History</h3>
-        <button type="button" id="closeHistory">X</button>
+        <h3 id="historyTitle">Calculation History</h3>
+        <button type="button" id="closeHistory" aria-label="Close history">X</button>
         <button type="button" id="clearHistory">Clear</button>
     </div>
 
-    <ul id="historyList"></ul>
+    <ul id="historyList" aria-labelledby="historyTitle"></ul>
 
 </div>
 </div>

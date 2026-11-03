@@ -78,6 +78,11 @@ historyToggle.addEventListener("click", function () {
 
     historyPanel.hidden = !historyPanel.hidden;
 
+    historyToggle.setAttribute(
+        "aria-expanded",
+        String(!historyPanel.hidden)
+    );
+
 });
 
 
@@ -85,6 +90,8 @@ historyToggle.addEventListener("click", function () {
 closeHistory.addEventListener("click", function () {
 
     historyPanel.hidden = true;
+
+    historyToggle.setAttribute("aria-expanded", "false");
 
 });
 
@@ -698,9 +705,43 @@ function handleInput(value) {
 // 11. KEYBOARD SUPPORT
 // ==========================================
 
+// Briefly highlight the button that matches a keyboard key
+function flashButton(selector) {
+
+    const button = document.querySelector(selector);
+
+    if (!button) {
+        return;
+    }
+
+    button.classList.add("key-active");
+
+    setTimeout(function () {
+
+        button.classList.remove("key-active");
+
+    }, 150);
+
+}
+
+
 document.addEventListener("keydown", function (event) {
 
     const key = event.key;
+
+
+    // When a button already has focus, let the browser handle
+    // Enter and Space as a normal button click so the same
+    // action is not applied twice
+    if (
+        event.target &&
+        event.target.tagName === "BUTTON" &&
+        (key === "Enter" || key === " ")
+    ) {
+
+        return;
+
+    }
 
 
     // Numbers, operators and decimal
@@ -716,6 +757,18 @@ document.addEventListener("keydown", function (event) {
 
         handleInput(key);
 
+        flashButton('[data-key="' + key + '"]');
+
+    }
+
+
+    // Letter x works as multiplication
+    else if (key === "x" || key === "X") {
+
+        handleInput("*");
+
+        flashButton('[data-key="*"]');
+
     }
 
 
@@ -725,6 +778,8 @@ document.addEventListener("keydown", function (event) {
         event.preventDefault();
 
         handleInput("=");
+
+        flashButton('[data-key="="]');
 
     }
 
@@ -736,6 +791,8 @@ document.addEventListener("keydown", function (event) {
 
         handleInput("DEL");
 
+        flashButton('[data-key="DEL"]');
+
     }
 
 
@@ -743,6 +800,8 @@ document.addEventListener("keydown", function (event) {
     else if (key === "Escape") {
 
         handleInput("AC");
+
+        flashButton('[data-key="AC"]');
 
     }
 

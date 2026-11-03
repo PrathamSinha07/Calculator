@@ -130,6 +130,39 @@ body {
 
 
 /* =================================
+   KEYBOARD FOCUS AND FEEDBACK
+================================= */
+
+/* Visible focus ring for keyboard navigation */
+
+.buttons button:focus-visible,
+#historyToggle:focus-visible,
+.history-header button:focus-visible,
+.display input:focus-visible {
+
+    outline: 3px solid #ffb74d;
+
+    outline-offset: 2px;
+}
+
+
+/* Highlight a button briefly when its key is pressed */
+
+.buttons button.key-active {
+    background: #6a6a6a;
+    transform: scale(0.94);
+}
+
+.buttons button:nth-child(3).key-active,
+.buttons button:nth-child(4).key-active,
+.buttons button:nth-child(8).key-active,
+.buttons button:nth-child(12).key-active,
+.buttons button:nth-child(16).key-active {
+    background: #e68700;
+}
+
+
+/* =================================
    OPERATORS
 ================================= */
 
