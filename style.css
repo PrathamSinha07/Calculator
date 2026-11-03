@@ -306,7 +306,7 @@ body {
 #historyList li {
     list-style: none;
 
-    padding: 11px 4px;
+    padding: 0;
 
     border-bottom: 1px solid #555555;
 
@@ -315,6 +315,39 @@ body {
     color: #eeeeee;
 
     overflow-wrap: anywhere;
+}
+
+/* History entries are buttons so they can be reused */
+.history-item {
+    width: 100%;
+
+    padding: 11px 4px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #eeeeee;
+
+    font-size: 14px;
+
+    text-align: right;
+
+    cursor: pointer;
+
+    transition: color 0.2s ease;
+}
+
+.history-item:hover {
+    color: #ffb74d;
+}
+
+.history-empty {
+    padding: 11px 4px;
+
+    color: #999999;
+
+    font-style: italic;
 }
 
 

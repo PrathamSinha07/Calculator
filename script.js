@@ -22,51 +22,24 @@ const clearHistory = document.getElementById("clearHistory");
 // 2. VARIABLES
 // ==========================================
 
-const STORAGE_KEY = "calculatorHistory";
-
 const operators = ["+", "-", "*", "/"];
 
 // Maximum number of characters allowed in an expression
 const MAX_INPUT_LENGTH = 20;
 
+// Maximum number of calculations kept in memory
+const MAX_HISTORY_ENTRIES = 30;
+
 let justCalculated = false;
 
 
 // ==========================================
-// 3. LOAD HISTORY FROM LOCAL STORAGE
+// 3. HISTORY STORAGE (MEMORY ONLY)
 // ==========================================
 
-function loadHistory() {
-
-    try {
-
-        const savedHistory = JSON.parse(
-            localStorage.getItem(STORAGE_KEY)
-        );
-
-        if (Array.isArray(savedHistory)) {
-            return savedHistory.filter(entry =>
-                entry &&
-                typeof entry.expression === "string" &&
-                typeof entry.result === "string"
-            );
-        }
-
-        return [];
-
-    }
-
-    catch (error) {
-
-        console.error("Unable to load history:", error);
-
-        return [];
-
-    }
-
-}
-
-let history = loadHistory();
+// History lives only in memory for the current session.
+// It is intentionally never written to LocalStorage.
+let history = [];
 
 
 // ==========================================
@@ -101,43 +74,74 @@ clearHistory.addEventListener("click", function () {
 
     history = [];
 
-    localStorage.removeItem(STORAGE_KEY);
-
     renderHistory();
 
 });
 
 
 // ==========================================
-// 5. SAVE HISTORY TO LOCAL STORAGE
-// ==========================================
-
-function saveHistory() {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(history)
-    );
-
-}
-
-
-// ==========================================
-// 6. DISPLAY CALCULATION HISTORY
+// 5. DISPLAY CALCULATION HISTORY
 // ==========================================
 
 function renderHistory() {
 
     historyList.innerHTML = "";
 
-    history.forEach(function (entry) {
+
+    // Empty state message
+    if (history.length === 0) {
+
+        const empty = document.createElement("li");
+
+        empty.className = "history-empty";
+
+        empty.textContent = "No calculations yet";
+
+        historyList.appendChild(empty);
+
+        clearHistory.disabled = true;
+
+        return;
+
+    }
+
+    clearHistory.disabled = false;
+
+    // Show the most recent calculation first
+    history.slice().reverse().forEach(function (entry) {
 
         const item = document.createElement("li");
 
-        item.textContent =
+        const button = document.createElement("button");
+
+        button.type = "button";
+
+        button.className = "history-item";
+
+        button.textContent =
             entry.expression + " = " + entry.result;
 
-        historyList.prepend(item);
+        button.setAttribute(
+            "aria-label",
+            "Reuse " + entry.expression + " equals " + entry.result
+        );
+
+        // Clicking an entry loads its result back into the display
+        button.addEventListener("click", function () {
+
+            display.value = entry.result;
+
+            justCalculated = true;
+
+            historyPanel.hidden = true;
+
+            historyToggle.setAttribute("aria-expanded", "false");
+
+        });
+
+        item.appendChild(button);
+
+        historyList.appendChild(item);
 
     });
 
@@ -145,10 +149,17 @@ function renderHistory() {
 
 
 // ==========================================
-// 7. ADD NEW CALCULATION TO HISTORY
+// 6. ADD NEW CALCULATION TO HISTORY
 // ==========================================
 
 function addToHistory(expression, result) {
+
+    // Ignore empty or repeated results
+    if (!expression || !result) {
+
+        return;
+
+    }
 
     history.push({
 
@@ -158,7 +169,13 @@ function addToHistory(expression, result) {
 
     });
 
-    saveHistory();
+
+    // Keep only the most recent calculations
+    if (history.length > MAX_HISTORY_ENTRIES) {
+
+        history.shift();
+
+    }
 
     renderHistory();
 
