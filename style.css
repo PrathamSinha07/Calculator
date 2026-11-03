@@ -41,6 +41,8 @@ body {
 
     background: #292929;
 
+    border: 1px solid #333333;
+
     border-radius: 24px;
 
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
@@ -61,7 +63,7 @@ body {
 
     padding: 15px;
 
-    border: none;
+    border: 2px solid transparent;
     outline: none;
 
     border-radius: 12px;
@@ -74,6 +76,18 @@ body {
     font-weight: 500;
 
     text-align: right;
+
+    transition: border-color 0.2s ease,
+                background 0.2s ease;
+}
+
+.display input:hover {
+    background: #424242;
+}
+
+/* Read-only display must still show a keyboard focus ring */
+.display input:focus-visible {
+    border-color: #ff9500;
 }
 
 
@@ -129,6 +143,14 @@ body {
 }
 
 
+/* Clear and delete buttons need their own hover colour */
+
+.buttons button:nth-child(1):hover,
+.buttons button:nth-child(2):hover {
+    background: #666666;
+}
+
+
 /* =================================
    KEYBOARD FOCUS AND FEEDBACK
 ================================= */
@@ -138,7 +160,7 @@ body {
 .buttons button:focus-visible,
 #historyToggle:focus-visible,
 .history-header button:focus-visible,
-.display input:focus-visible {
+.history-item:focus-visible {
 
     outline: 3px solid #ffb74d;
 
@@ -250,6 +272,22 @@ body {
     background: #505050;
 }
 
+#historyToggle:active {
+    transform: scale(0.98);
+}
+
+/* Disabled state for the Clear button when history is empty */
+
+#clearHistory:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+#clearHistory:not(:disabled):hover {
+    background: #6a6a6a;
+}
+
 
 /* =================================
    HISTORY PANEL
@@ -352,13 +390,19 @@ body {
 
 
 /* =================================
-   MOBILE RESPONSIVENESS
+   RESPONSIVENESS
 ================================= */
 
+/* Small phones */
 @media (max-width: 400px) {
+
+    body {
+        padding: 12px;
+    }
 
     .calculator {
         padding: 18px;
+        border-radius: 18px;
     }
 
     .buttons {
@@ -370,9 +414,68 @@ body {
         font-size: 19px;
     }
 
+    .display {
+        margin-bottom: 18px;
+    }
+
     .display input {
         height: 75px;
         font-size: 30px;
+    }
+
+    #historyToggle {
+        margin-top: 16px;
+    }
+
+}
+
+
+/* Tablets and small laptops */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+    .calculator {
+        max-width: 420px;
+
+        padding: 28px;
+    }
+
+    .buttons button {
+        height: 70px;
+        font-size: 23px;
+    }
+
+    .display input {
+        height: 95px;
+        font-size: 40px;
+    }
+
+}
+
+
+/* Large desktop screens */
+@media (min-width: 1025px) {
+
+    .calculator {
+        max-width: 400px;
+    }
+
+}
+
+
+/* Respect users who prefer reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .buttons button,
+    .display input,
+    #historyToggle,
+    .history-item {
+        transition: none;
+    }
+
+    .buttons button:active,
+    .buttons button.key-active {
+        transform: none;
     }
 
 }
